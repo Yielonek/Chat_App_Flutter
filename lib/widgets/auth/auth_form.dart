@@ -1,6 +1,15 @@
 import 'package:flutter/material.dart';
 
 class AuthForm extends StatefulWidget {
+  AuthForm(this.submitFunction);
+
+  final void Function(
+    String email,
+    String password,
+    String username,
+    bool isLogin,
+  ) submitFunction;
+
   @override
   State<AuthForm> createState() => _AuthFormState();
 }
@@ -19,9 +28,12 @@ class _AuthFormState extends State<AuthForm> {
 
     if (isValid) {
       _formKey.currentState.save();
-      print(_userEmail);
-      print(_userName);
-      print(_userPassword);
+      widget.submitFunction(
+        _userEmail,
+        _userPassword,
+        _userName,
+        _isLogin,
+      );
 // Use those values to send our auth request ....
     }
   }
@@ -56,19 +68,19 @@ class _AuthFormState extends State<AuthForm> {
                     },
                   ),
                   if (!_isLogin)
-                  TextFormField(
-                    key: ValueKey('username'),
-                    validator: (value) {
-                      if (value.isEmpty || value.length < 4) {
-                        return ' Please enter at least 4 characters.';
-                      }
-                      return null;
-                    },
-                    decoration: InputDecoration(labelText: 'Username'),
-                    onSaved: (value) {
-                      _userName = value;
-                    },
-                  ),
+                    TextFormField(
+                      key: ValueKey('username'),
+                      validator: (value) {
+                        if (value.isEmpty || value.length < 4) {
+                          return ' Please enter at least 4 characters.';
+                        }
+                        return null;
+                      },
+                      decoration: InputDecoration(labelText: 'Username'),
+                      onSaved: (value) {
+                        _userName = value;
+                      },
+                    ),
                   TextFormField(
                     key: ValueKey('password]'),
                     validator: (value) {
